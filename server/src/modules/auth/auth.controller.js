@@ -98,7 +98,7 @@ export async function me(req, res) {
   return res.status(200).json({
     success: true,
     data: {
-      userId: req.auth.userId,
+      user: req.auth.user,
       organization: req.auth.organization,
       membership: { id: req.auth.membershipId, role: req.auth.role }
     }
