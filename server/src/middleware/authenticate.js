@@ -24,7 +24,7 @@ export async function authenticate(req, res, next) {
 
   try {
     const [user, membership, organization] = await Promise.all([
-      User.findOne({ _id: claims.sub, status: "active" }).select("_id").lean(),
+      User.findOne({ _id: claims.sub, status: "active" }).select("_id name email").lean(),
       Membership.findOne({
         _id: claims.mid,
         userId: claims.sub,
@@ -48,6 +48,7 @@ export async function authenticate(req, res, next) {
 
     req.auth = {
       userId: String(claims.sub),
+      user: { id: String(user._id), name: user.name, email: user.email },
       organizationId: String(claims.org),
       membershipId: String(claims.mid),
       role: membership.role,
