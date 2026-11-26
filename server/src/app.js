@@ -1,8 +1,10 @@
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
+import cookieParser from "cookie-parser";
 import rateLimit from "express-rate-limit";
 import { env } from "./config/env.js";
+import { authRoutes } from "./modules/auth/index.js";
 
 export function createApp({ databaseStatus = () => "not-connected" } = {}) {
   const app = express();
@@ -16,6 +18,7 @@ export function createApp({ databaseStatus = () => "not-connected" } = {}) {
   }));
   app.use(express.json({ limit: "1mb" }));
   app.use(express.urlencoded({ extended: false, limit: "1mb" }));
+  app.use(cookieParser());
   app.use(rateLimit({
     windowMs: 15 * 60 * 1000,
     limit: 300,
@@ -43,6 +46,8 @@ export function createApp({ databaseStatus = () => "not-connected" } = {}) {
       data: { status: ready ? "ready" : "not-ready", database }
     });
   });
+
+  app.use(`${env.API_PREFIX}/auth`, authRoutes);
 
   app.use((_req, res) => {
     res.status(404).json({
