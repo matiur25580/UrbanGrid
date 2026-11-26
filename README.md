@@ -8,9 +8,11 @@ UrbanGrid is an enterprise-oriented MERN application for managing infrastructure
 
 ## Project status
 
-**Milestone 1 — Foundation:** in progress.
+**Milestone 1 — Foundation:** implemented as the initial repository baseline.
 
-This repository is being developed incrementally. Features will be marked complete only after implementation and verification. The initial release establishes the application workspace, API health endpoint, configuration validation, and contributor conventions.
+**Milestone 2 — Enterprise identity and tenant foundation:** implementation in progress on `feat/enterprise-auth-multitenancy`. The branch introduces user registration/login, bcrypt password hashing, short-lived JWT access tokens, rotating opaque refresh sessions, session revocation, organization provisioning, active membership checks, and role permission policies. See [Authentication documentation](docs/AUTHENTICATION.md).
+
+Features are marked complete only after implementation and verification. A committed implementation is not automatically a production security certification.
 
 ## Product principles
 
@@ -41,6 +43,7 @@ This repository is being developed incrementally. Features will be marked comple
 | API | Node.js, Express |
 | Database | MongoDB, Mongoose |
 | Validation | Zod |
+| Identity | bcrypt, JWT, HttpOnly refresh cookie |
 | Security | Helmet, CORS allowlist, rate limiting |
 | Future real-time | Socket.IO |
 | Future maps | Leaflet / MapLibre, GeoJSON |
@@ -51,12 +54,14 @@ This repository is being developed incrementally. Features will be marked comple
 ```text
 UrbanGrid/
 ├── client/                 # React + TypeScript application
-├── server/                 # Express API
-├── docs/                   # Architecture and engineering decisions
+├── server/
+│   └── src/
+│       ├── config/
+│       ├── middleware/
+│       ├── models/
+│       └── modules/auth/   # Identity, sessions, permissions
+├── docs/                   # Architecture, security, roadmap
 ├── .github/workflows/      # CI automation
-├── .env.example
-├── .gitignore
-├── package.json            # npm workspaces
 └── README.md
 ```
 
@@ -72,6 +77,7 @@ UrbanGrid/
 git clone https://github.com/matiur25580/UrbanGrid.git
 cd UrbanGrid
 cp .env.example .env
+# Set a unique JWT_ACCESS_SECRET (at least 32 characters) in .env
 npm install
 npm run dev
 ```
@@ -80,8 +86,11 @@ The API listens on `http://localhost:5000` by default and exposes:
 
 - `GET /api/v1/health` — liveness and service metadata
 - `GET /api/v1/ready` — readiness, including database connectivity
+- `POST /api/v1/auth/register` — create an account and organization
+- `POST /api/v1/auth/login` — sign in to an organization
+- `POST /api/v1/auth/refresh` — rotate the refresh session
 
-The web application runs on `http://localhost:5173`.
+See [Authentication API and security behavior](docs/AUTHENTICATION.md) for the full route list and limitations.
 
 ## Environment
 
@@ -90,6 +99,7 @@ See [`.env.example`](.env.example). Never commit real credentials, production to
 ## Engineering documentation
 
 - [Architecture](docs/ARCHITECTURE.md)
+- [Authentication](docs/AUTHENTICATION.md)
 - [Development roadmap](docs/ROADMAP.md)
 - [Security baseline](docs/SECURITY.md)
 - [Contributing](CONTRIBUTING.md)
