@@ -2,7 +2,8 @@ import { Router } from "express";
 import rateLimit from "express-rate-limit";
 import { authenticate } from "../../middleware/authenticate.js";
 import { authorize } from "../../middleware/authorize.js";
-import { register, login, refresh, logout, logoutAll, me, sessions } from "./auth.controller.js";
+import { ROLE_PERMISSIONS } from "./permissions.js";
+import { register, login, refresh, logout, logoutAll, me, sessions, revokeSession } from "./auth.controller.js";
 
 const router = Router();
 const authLimiter = rateLimit({
@@ -23,10 +24,11 @@ router.post("/logout", logout);
 router.post("/logout-all", authenticate, logoutAll);
 router.get("/me", authenticate, me);
 router.get("/sessions", authenticate, sessions);
+router.delete("/sessions/:sessionId", authenticate, revokeSession);
 router.get("/permissions", authenticate, (req, res) => {
   res.json({
     success: true,
-    data: { role: req.auth.role, permissions: req.auth.role === "organization_owner" || req.auth.role === "organization_admin" ? ["*"] : undefined }
+    data: { role: req.auth.role, permissions: ROLE_PERMISSIONS[req.auth.role] || [] }
   });
 });
 router.get("/admin-check", authenticate, authorize("organization:manage"), (_req, res) => {
