@@ -12,8 +12,16 @@ export async function authenticate(req, res, next) {
     });
   }
 
+  let claims;
   try {
-    const claims = verifyAccessToken(token);
+    claims = verifyAccessToken(token);
+  } catch {
+    return res.status(401).json({
+      success: false, error: { code: "INVALID_ACCESS_TOKEN", message: "The access token is invalid or expired." }
+    });
+  }
+
+  try {
     const membership = await Membership.findOne({
       _id: claims.mid,
       userId: claims.sub,
@@ -42,9 +50,7 @@ export async function authenticate(req, res, next) {
       organization
     };
     return next();
-  } catch {
-    return res.status(401).json({
-      success: false, error: { code: "INVALID_ACCESS_TOKEN", message: "The access token is invalid or expired." }
-    });
+  } catch (error) {
+    return next(error);
   }
 }
