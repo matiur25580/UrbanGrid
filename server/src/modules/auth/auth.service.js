@@ -1,5 +1,4 @@
 import bcrypt from "bcrypt";
-import { randomUUID } from "node:crypto";
 import { User } from "../../models/User.js";
 import { Organization } from "../../models/Organization.js";
 import { Membership } from "../../models/Membership.js";
@@ -8,6 +7,7 @@ import { createRefreshToken, hashRefreshToken, signAccessToken } from "./auth.to
 
 const PASSWORD_COST = 12;
 const REFRESH_SESSION_DAYS = 30;
+const DUMMY_PASSWORD_HASH = "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy";
 
 function sessionExpiry() {
   return new Date(Date.now() + REFRESH_SESSION_DAYS * 24 * 60 * 60 * 1000);
@@ -79,7 +79,7 @@ export async function registerAccount(input, req) {
 export async function loginAccount(input, req) {
   const user = await User.findOne({ email: input.email }).select("+passwordHash");
   if (!user || user.status !== "active") {
-    await bcrypt.compare(input.password, "$2b$12$C6UzMDM.H6dfI/f/IKcEe.4gK9jM9P2w6G6G4Y9X0o7Y4j3P7Y6mK");
+    await bcrypt.compare(input.password, DUMMY_PASSWORD_HASH);
     return null;
   }
 
@@ -107,13 +107,21 @@ export async function rotateRefreshSession(token, req) {
   if (!token) return null;
 
   const now = new Date();
+  const tokenHash = hashRefreshToken(token);
   const oldSession = await RefreshSession.findOneAndUpdate({
-    tokenHash: hashRefreshToken(token),
+    tokenHash,
     revokedAt: null,
     expiresAt: { $gt: now }
   }, { $set: { revokedAt: now, lastUsedAt: now } }, { new: false });
 
-  if (!oldSession) return null;
+  if (!oldSession) {
+    const previouslyUsed = await RefreshSession.findOne({ tokenHash }).select("+tokenHash");
+    if (previouslyUsed?.revokedAt) {
+      // Reuse of a rotated token is treated as possible theft: revoke the user's active refresh sessions.
+      await revokeAllSessions(previouslyUsed.userId);
+    }
+    return null;
+  }
 
   const [user, organization, membership] = await Promise.all([
     User.findOne({ _id: oldSession.userId, status: "active" }),
@@ -159,4 +167,11 @@ export async function listSessions(userId) {
     userId, revokedAt: null, expiresAt: { $gt: new Date() }
   }).select("_id organizationId userAgent ipAddress createdAt lastUsedAt expiresAt")
     .sort({ lastUsedAt: -1 }).lean();
+}
+
+export async function revokeSessionById(userId, sessionId) {
+  const result = await RefreshSession.updateOne({
+    _id: sessionId, userId, revokedAt: null
+  }, { $set: { revokedAt: new Date() } });
+  return result.modifiedCount === 1;
 }
