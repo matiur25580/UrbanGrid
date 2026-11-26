@@ -1,0 +1,16 @@
+# Development roadmap
+
+| Milestone | Scope | Exit criteria |
+| --- | --- | --- |
+| 1. Foundation | MERN workspace, configuration, API health, docs, CI baseline | Client builds; API starts; health and readiness are testable |
+| 2. Identity | Registration, login, password hashing, access/refresh tokens, session revocation | Auth integration tests and secure cookie/session policy |
+| 3. Organizations & RBAC | Tenant creation, membership, invitations, roles, granular permissions | Cross-tenant access tests pass |
+| 4. Asset registry | Asset categories, identifiers, lifecycle, documents | Tenant-scoped CRUD and validation |
+| 5. Geospatial | GeoJSON locations, map layers, spatial filters | Geospatial index and map workflows verified |
+| 6. Maintenance | Work orders, schedules, assignment, approvals | Full work-order lifecycle tests |
+| 7. Inspections & field teams | Checklists, evidence, technician workflows | Mobile-responsive field workflow |
+| 8. Monitoring & incidents | Simulated telemetry, thresholds, event processing, alerts | Reproducible scenarios and event tests |
+| 9. Intelligence & finance | Explainable health scores, prioritization, budget analytics | Documented formulas and deterministic fixtures |
+| 10. Production readiness | Security review, observability, CI/CD, Docker, backups | Deployment runbook and automated quality gates |
+
+A milestone is not complete because its UI exists. Completion requires working end-to-end behavior, tests, documentation, and an explicit limitations section.
