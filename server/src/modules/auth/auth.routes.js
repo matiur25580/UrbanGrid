@@ -17,6 +17,11 @@ const authLimiter = rateLimit({
   }
 });
 
+router.use((_req, res, next) => {
+  res.set("Cache-Control", "no-store");
+  next();
+});
+
 router.post("/register", authLimiter, register);
 router.post("/login", authLimiter, login);
 router.post("/refresh", authLimiter, refresh);
