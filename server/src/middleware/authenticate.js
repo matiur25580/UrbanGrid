@@ -1,4 +1,5 @@
 import { verifyAccessToken } from "../modules/auth/auth.tokens.js";
+import { User } from "../models/User.js";
 import { Membership } from "../models/Membership.js";
 import { Organization } from "../models/Organization.js";
 
@@ -22,20 +23,23 @@ export async function authenticate(req, res, next) {
   }
 
   try {
-    const membership = await Membership.findOne({
-      _id: claims.mid,
-      userId: claims.sub,
-      organizationId: claims.org,
-      status: "active"
-    }).lean();
+    const [user, membership, organization] = await Promise.all([
+      User.findOne({ _id: claims.sub, status: "active" }).select("_id").lean(),
+      Membership.findOne({
+        _id: claims.mid,
+        userId: claims.sub,
+        organizationId: claims.org,
+        status: "active"
+      }).lean(),
+      Organization.findOne({ _id: claims.org, status: "active" }).select("_id name slug").lean()
+    ]);
 
-    if (!membership) {
+    if (!user || !membership) {
       return res.status(401).json({
-        success: false, error: { code: "SESSION_MEMBERSHIP_INACTIVE", message: "The organization membership is unavailable." }
+        success: false, error: { code: "SESSION_MEMBERSHIP_INACTIVE", message: "The user or organization membership is unavailable." }
       });
     }
 
-    const organization = await Organization.findOne({ _id: claims.org, status: "active" }).select("_id name slug").lean();
     if (!organization) {
       return res.status(403).json({
         success: false, error: { code: "ORGANIZATION_UNAVAILABLE", message: "This organization is unavailable." }
