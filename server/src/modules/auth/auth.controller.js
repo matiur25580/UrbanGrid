@@ -1,5 +1,6 @@
+import mongoose from "mongoose";
 import { registerSchema, loginSchema } from "./auth.schemas.js";
-import { registerAccount, loginAccount, rotateRefreshSession, revokeRefreshSession, revokeAllSessions, listSessions } from "./auth.service.js";
+import { registerAccount, loginAccount, rotateRefreshSession, revokeRefreshSession, revokeAllSessions, listSessions, revokeSessionById } from "./auth.service.js";
 import { REFRESH_COOKIE_NAME, setRefreshCookie, clearRefreshCookie } from "./auth.cookies.js";
 
 function validationError(res, parsed) {
@@ -119,6 +120,25 @@ export async function sessions(req, res, next) {
         expiresAt: item.expiresAt
       })) }
     });
+  } catch (error) {
+    return next(error);
+  }
+}
+
+export async function revokeSession(req, res, next) {
+  if (!mongoose.isValidObjectId(req.params.sessionId)) {
+    return res.status(400).json({
+      success: false, error: { code: "INVALID_SESSION_ID", message: "The session identifier is invalid." }
+    });
+  }
+  try {
+    const revoked = await revokeSessionById(req.auth.userId, req.params.sessionId);
+    if (!revoked) {
+      return res.status(404).json({
+        success: false, error: { code: "SESSION_NOT_FOUND", message: "The active session was not found." }
+      });
+    }
+    return res.status(200).json({ success: true, data: { revoked: true } });
   } catch (error) {
     return next(error);
   }
