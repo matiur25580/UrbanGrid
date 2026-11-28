@@ -63,7 +63,9 @@ UrbanGrid/
 │       ├── config/
 │       ├── middleware/
 │       ├── models/
-│       └── modules/auth/   # Identity, sessions, permissions
+│       ├── modules/auth/          # Identity, sessions, permissions
+│       ├── modules/organizations/ # Membership, roles, teams, departments
+│       └── modules/assets/        # Tenant-scoped infrastructure asset registry
 ├── docs/                   # Architecture, security, roadmap
 ├── .github/workflows/      # CI automation
 └── README.md
