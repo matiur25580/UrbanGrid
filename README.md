@@ -10,11 +10,11 @@ UrbanGrid is an enterprise-oriented MERN application for managing infrastructure
 
 **Milestone 1 — Foundation:** implemented as the initial repository baseline.
 
-**Milestone 2 — Enterprise identity and tenant foundation:** implemented on `feat/enterprise-auth-multitenancy` and proposed in PR #1. It introduces registration/login, bcrypt password hashing, short-lived JWT access tokens, rotating opaque refresh sessions, session revocation, organization provisioning, active membership checks, and role permission policies. See [Authentication documentation](docs/AUTHENTICATION.md).
+**Milestone 2 — Enterprise identity and tenant foundation:** merged into `main` (PR #1). It provides registration/login, bcrypt password hashing, short-lived JWT access tokens, rotating opaque refresh sessions, session revocation, organization provisioning, active membership checks, and role permission policies. See [Authentication documentation](docs/AUTHENTICATION.md).
 
-**Milestone 3 — Organization & workforce management:** implemented on `feat/organization-workforce-management` and proposed in PR #2 (still open; not merged). It adds organization-scoped invitations, membership administration, custom roles, organization switching, departments, teams, and audit events. See [Organization management documentation](docs/ORGANIZATION-MANAGEMENT.md).
+**Milestone 3 — Organization & workforce management:** merged into `main` (PR #2). It provides organization-scoped invitations, membership administration, custom roles, organization switching, departments, teams, and audit events. See [Organization management documentation](docs/ORGANIZATION-MANAGEMENT.md).
 
-**Milestone 4 — Infrastructure Asset Registry:** implementation in progress on `feat/infrastructure-asset-registry`, built on the Milestone 3 branch. It adds tenant-scoped asset categories, configurable metadata, unique asset codes, lifecycle controls, geospatial points, document metadata, search/filter/pagination, and audit events. See [Asset Registry documentation](docs/ASSET-REGISTRY.md).
+**Milestone 4 — Infrastructure Asset Registry:** merged into `main` (PR #3). It provides tenant-scoped asset categories, configurable metadata, unique asset codes, lifecycle controls, GeoJSON points, document metadata registration, search/filter/pagination, tenant-aware reference validation, and audit events. See [Asset Registry documentation](docs/ASSET-REGISTRY.md).
 
 Features are marked complete only after implementation and verification. A committed implementation is not automatically a production security certification.
 
