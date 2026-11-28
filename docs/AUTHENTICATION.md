@@ -43,7 +43,7 @@ A successful response returns an access token in JSON and sets the refresh token
 }
 ```
 
-The organization slug is required because one user may eventually belong to multiple organizations. The API currently provisions the first organization owner during registration; invitation and multi-organization switching workflows are future work.
+The organization slug is required for organization-scoped login. Registration provisions the first organization owner; additional memberships are created through the invitation workflow, and authenticated users can switch active organization context. See [Organization management](ORGANIZATION-MANAGEMENT.md) for invitation acceptance and organization switching.
 
 ## Security behavior
 
@@ -64,7 +64,7 @@ The organization identifier is read from signed access-token claims and checked 
 ## Current limitations and deployment notes
 
 - Registration creates user, organization, and owner membership with compensating cleanup on failure. A MongoDB replica-set transaction should replace this when the deployment baseline guarantees transaction support.
-- Email verification, password reset, invitations, organization switching, MFA, SSO, and account recovery are not implemented yet.
+- Email verification, password reset, MFA, SSO, account recovery, and organization ownership transfer are not implemented yet. Organization invitations and organization switching are available as described in [Organization management](ORGANIZATION-MANAGEMENT.md).
 - Revoking a refresh session prevents future refreshes. Already issued access tokens remain valid until their short expiry (15 minutes by default).
 - The refresh cookie uses SameSite=Strict. If the frontend is later hosted on a different site, revisit the cookie and CSRF strategy before changing this policy.
 - Use a unique high-entropy JWT secret in each environment and terminate TLS at the production edge.

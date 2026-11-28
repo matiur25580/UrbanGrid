@@ -16,9 +16,9 @@ This document records the implemented controls and remaining security work. It i
 ## Required controls before production
 
 - Keep secrets in a managed secret store and rotate credentials regularly.
-- Add email verification, password reset, account recovery, MFA, and organization invitations.
+- Add email verification, password reset, account recovery, MFA, and organization ownership transfer. Invitation acceptance and organization switching are implemented; invitation delivery remains manual.
 - Replace registration's compensating cleanup with MongoDB transactions once replica-set support is guaranteed.
-- Add centralized audit events for identity, membership, and future business-critical mutations.
+- Organization invitation, membership, role, department, team, and organization-switch audit events are implemented. Extend the audit coverage to asset, maintenance, inspection, finance, and other business-critical mutations.
 - Add CSRF protection appropriate to the final deployment topology before changing the SameSite cookie policy.
 - Add dependency scanning, secret scanning, security headers review, and automated penetration testing.
 - Define backup/restore, incident response, and key-rotation runbooks.
