@@ -10,7 +10,9 @@ UrbanGrid is an enterprise-oriented MERN application for managing infrastructure
 
 **Milestone 1 — Foundation:** implemented as the initial repository baseline.
 
-**Milestone 2 — Enterprise identity and tenant foundation:** implementation in progress on `feat/enterprise-auth-multitenancy`. The branch introduces user registration/login, bcrypt password hashing, short-lived JWT access tokens, rotating opaque refresh sessions, session revocation, organization provisioning, active membership checks, and role permission policies. See [Authentication documentation](docs/AUTHENTICATION.md).
+**Milestone 2 — Enterprise identity and tenant foundation:** implemented on `feat/enterprise-auth-multitenancy` and proposed in PR #1. It introduces registration/login, bcrypt password hashing, short-lived JWT access tokens, rotating opaque refresh sessions, session revocation, organization provisioning, active membership checks, and role permission policies. See [Authentication documentation](docs/AUTHENTICATION.md).
+
+**Milestone 3 — Organization & workforce management:** implementation in progress on `feat/organization-workforce-management`. It adds organization-scoped invitations, membership administration, custom roles, organization switching, departments, teams, and audit events. See [Organization management documentation](docs/ORGANIZATION-MANAGEMENT.md).
 
 Features are marked complete only after implementation and verification. A committed implementation is not automatically a production security certification.
 
