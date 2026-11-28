@@ -33,4 +33,19 @@ describe("UrbanGrid API foundation", () => {
     assert.equal(response.status, 404);
     assert.equal(response.body.error.code, "ROUTE_NOT_FOUND");
   });
+
+  it("validates registration input before attempting database writes", async () => {
+    const response = await request(createApp())
+      .post("/api/v1/auth/register")
+      .send({ email: "not-an-email", password: "weak" });
+    assert.equal(response.status, 400);
+    assert.equal(response.body.error.code, "VALIDATION_ERROR");
+    assert.equal(response.headers["cache-control"], "no-store");
+  });
+
+  it("requires a bearer token for protected identity routes", async () => {
+    const response = await request(createApp()).get("/api/v1/auth/me");
+    assert.equal(response.status, 401);
+    assert.equal(response.body.error.code, "AUTHENTICATION_REQUIRED");
+  });
 });
