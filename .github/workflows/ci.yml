@@ -2,13 +2,25 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, 'feat/**', 'fix/**']
   pull_request:
-    branches: [main]
+    branches: [main, 'feat/**', 'fix/**']
 
 jobs:
   verify:
     runs-on: ubuntu-latest
+    env:
+      MONGODB_TEST_URI: mongodb://127.0.0.1:27017/urbangrid_test
+    services:
+      mongodb:
+        image: mongo:8.0
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --quiet --eval 'db.adminCommand({ ping: 1 })'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
