@@ -7,6 +7,7 @@ import { env } from "./config/env.js";
 import { authRoutes } from "./modules/auth/index.js";
 import { organizationRoutes } from "./modules/organizations/index.js";
 import { assetRoutes } from "./modules/assets/index.js";
+import workOrderRoutes from "./modules/maintenance/work-order.routes.js";
 
 export function createApp({ databaseStatus = () => "not-connected" } = {}) {
   const app = express();
@@ -52,6 +53,7 @@ export function createApp({ databaseStatus = () => "not-connected" } = {}) {
   app.use(`${env.API_PREFIX}/auth`, authRoutes);
   app.use(`${env.API_PREFIX}/organizations`, organizationRoutes);
   app.use(`${env.API_PREFIX}/assets`, assetRoutes);
+  app.use(`${env.API_PREFIX}/work-orders`, workOrderRoutes);
 
   app.use((_req, res) => {
     res.status(404).json({
