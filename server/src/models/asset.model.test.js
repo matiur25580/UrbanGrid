@@ -8,7 +8,7 @@ describe("asset persistence model", () => {
   it("enforces tenant-scoped asset identifiers and geospatial indexes", () => {
     const indexes = Asset.schema.indexes();
     assert.ok(indexes.some(([keys, options]) => keys.organizationId === 1 && keys.assetCode === 1 && options.unique === true));
-    assert.ok(indexes.some(([keys]) => keys.location === "2dsphere"));
+    assert.ok(indexes.some(([keys]) => keys.organizationId === 1 && keys.location === "2dsphere"));
   });
 
   it("rejects invalid GeoJSON coordinates at the model boundary", async () => {

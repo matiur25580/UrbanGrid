@@ -61,6 +61,6 @@ assetSchema.index({ organizationId: 1, categoryId: 1, status: 1 });
 assetSchema.index({ organizationId: 1, status: 1, criticality: 1 });
 assetSchema.index({ organizationId: 1, serialNumber: 1 }, { partialFilterExpression: { serialNumber: { $type: "string", $gt: "" } } });
 assetSchema.index({ organizationId: 1, name: 1 });
-assetSchema.index({ location: "2dsphere" });
+assetSchema.index({ organizationId: 1, location: "2dsphere" });
 
 export const Asset = mongoose.models.Asset || mongoose.model("Asset", assetSchema);
