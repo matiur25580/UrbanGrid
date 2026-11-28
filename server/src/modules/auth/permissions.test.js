@@ -14,6 +14,14 @@ describe("organization role permissions", () => {
     assert.equal(hasPermission("field_technician", "organization:manage"), false);
   });
 
+  it("grants asset registry capabilities to the asset manager", () => {
+    assert.equal(hasPermission("asset_manager", "assets:create"), true);
+    assert.equal(hasPermission("asset_manager", "assets:archive"), true);
+    assert.equal(hasPermission("asset_manager", "assets:categories:manage"), true);
+    assert.equal(hasPermission("asset_manager", "assets:documents:manage"), true);
+    assert.equal(hasPermission("asset_manager", "finance:manage"), false);
+  });
+
   it("does not grant permissions to unknown roles", () => {
     assert.equal(hasPermission("unknown_role", "assets:read"), false);
     assert.deepEqual(ROLE_PERMISSIONS.unknown_role || [], []);

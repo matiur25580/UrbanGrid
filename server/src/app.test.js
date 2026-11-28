@@ -49,6 +49,13 @@ describe("UrbanGrid API foundation", () => {
     assert.equal(response.body.error.code, "AUTHENTICATION_REQUIRED");
   });
 
+  it("requires a bearer token for asset registry routes", async () => {
+    const response = await request(createApp()).get("/api/v1/assets");
+    assert.equal(response.status, 401);
+    assert.equal(response.body.error.code, "AUTHENTICATION_REQUIRED");
+    assert.equal(response.headers["cache-control"], "no-store");
+  });
+
   it("requires a bearer token for organization administration routes", async () => {
     const response = await request(createApp()).get("/api/v1/organizations/members");
     assert.equal(response.status, 401);
