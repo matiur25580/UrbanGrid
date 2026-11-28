@@ -2,12 +2,12 @@ export const ROLE_PERMISSIONS = Object.freeze({
   organization_owner: ["*"],
   organization_admin: ["*"],
   operations_manager: [
-    "dashboard:read", "assets:read", "assets:create", "assets:update",
+    "dashboard:read", "assets:read", "assets:create", "assets:update", "assets:archive", "assets:categories:manage", "assets:documents:manage",
     "maintenance:read", "maintenance:create", "maintenance:assign", "maintenance:approve",
     "inspections:read", "inspections:create", "incidents:read", "incidents:manage",
     "workforce:read", "workforce:manage", "analytics:read", "org:members:read"
   ],
-  asset_manager: ["assets:read", "assets:create", "assets:update", "assets:archive", "inspections:read", "analytics:read"],
+  asset_manager: ["assets:read", "assets:create", "assets:update", "assets:archive", "assets:categories:manage", "assets:documents:manage", "inspections:read", "analytics:read"],
   maintenance_supervisor: [
     "assets:read", "maintenance:read", "maintenance:create", "maintenance:assign",
     "maintenance:update", "maintenance:approve", "inspections:read", "inspections:create",

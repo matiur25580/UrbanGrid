@@ -3,7 +3,7 @@ import { z } from "zod";
 const objectId = z.string().regex(/^[a-f0-9]{24}$/i, "A valid identifier is required");
 const roleKey = z.string().trim().min(2).max(64).regex(/^[a-z][a-z0-9_-]*$/);
 const allowedPermissions = [
-  "dashboard:read", "assets:read", "assets:create", "assets:update", "assets:archive",
+  "dashboard:read", "assets:read", "assets:create", "assets:update", "assets:archive", "assets:categories:manage", "assets:documents:manage",
   "maintenance:read", "maintenance:create", "maintenance:assign", "maintenance:approve", "maintenance:update",
   "inspections:read", "inspections:create", "inspections:approve", "incidents:read", "incidents:create", "incidents:manage",
   "workforce:read", "workforce:manage", "analytics:read", "finance:read", "finance:manage", "audit:read",
